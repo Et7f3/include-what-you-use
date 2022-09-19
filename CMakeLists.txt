@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.4.3)
 
+option(USE_ALTERNATIVE_LIBCPP "Define it to ON if you don't want to pull system libcxx." OFF)
+if (USE_ALTERNATIVE_LIBCPP)
+  set_source_files_properties(iwyu_driver.cc PROPERTIES COMPILE_DEFINITIONS USE_ALTERNATIVE_LIBCPP)
+endif()
+
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   set(iwyu_standalone_build ON)
   message(STATUS "IWYU: standalone build")

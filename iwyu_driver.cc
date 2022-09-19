@@ -216,6 +216,8 @@ CompilerInstance* CreateCompilerInstance(int argc, const char **argv) {
   CompilerInvocation::CreateFromArgs(*invocation, cc_arguments, diagnostics);
   invocation->getFrontendOpts().DisableFree = false;
 
+#ifndef USE_ALTERNATIVE_LIBCPP
+  // -DUSE_ALTERNATIVE_LIBCPP=ON on cmake command line to disable this section of code
   // Use libc++ headers bundled with Xcode.app on macOS.
   llvm::Triple triple(invocation->getTargetOpts().Triple);
   if (triple.isOSDarwin() && invocation->getHeaderSearchOpts().UseLibcxx) {
@@ -229,6 +231,7 @@ CompilerInstance* CreateCompilerInstance(int argc, const char **argv) {
         clang::frontend::CXXSystem,
         /*IsFramework=*/false, /*IgnoreSysRoot=*/true);
   }
+#endif // !USE_ALTERNATIVE_LIBCPP
 
   // Show the invocation, with -v.
   if (invocation->getHeaderSearchOpts().Verbose) {
